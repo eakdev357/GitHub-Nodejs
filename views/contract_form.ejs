@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-industry"></i> ระบบจัดการการผลิต
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/"><i class="fas fa-home"></i> หน้าแรก</a>
+                <a class="nav-link" href="/contracts"><i class="fas fa-file-contract"></i> สัญญา</a>
+                <a class="nav-link" href="/production-queue"><i class="fas fa-list"></i> คิวการผลิต</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-file-contract"></i> <%= title %>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <% if (error) { %>
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle"></i> <%= error %>
+                            </div>
+                        <% } %>
+                        
+                        <form method="POST" action="/contracts">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="contract_number" class="form-label">หมายเลขสัญญา</label>
+                                        <input type="text" class="form-control" id="contract_number" 
+                                               name="contract_number" required placeholder="เช่น CT-2025-001"
+                                               value="CT-2025-<%= String(Date.now()).slice(-3) %>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="customer_id" class="form-label">รหัสลูกค้า</label>
+                                        <input type="number" class="form-control" id="customer_id" 
+                                               name="customer_id" required placeholder="เช่น 1001">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="created_user" class="form-label">ผู้สร้าง</label>
+                                <input type="text" class="form-control" id="created_user" 
+                                       name="created_user" required placeholder="ชื่อผู้สร้างสัญญา"
+                                       value="admin">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="description" class="form-label">รายละเอียดสัญญา</label>
+                                <textarea class="form-control" id="description" name="description" 
+                                          rows="3" placeholder="รายละเอียดของสัญญา (ไม่บังคับ)"></textarea>
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="/contracts" class="btn btn-secondary">
+                                    <i class="fas fa-times"></i> ยกเลิก
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> บันทึก
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Auto-generate contract number
+        document.addEventListener('DOMContentLoaded', function() {
+            const now = new Date();
+            const contractNumber = `CT-${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}${String(now.getHours()).padStart(2, '0')}`;
+            document.getElementById('contract_number').value = contractNumber;
+        });
+    </script>
+</body>
+</html>

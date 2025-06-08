@@ -1,0 +1,124 @@
+<!-- views/index.ejs - หน้าแรก -->
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4"><i class="fas fa-industry"></i> <%= title %></h1>
+        
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card text-white bg-primary">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h5 class="card-title">สัญญาทั้งหมด</h5>
+                                <h2><%= contracts.length %></h2>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-file-contract fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-success">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h5 class="card-title">สินค้าที่วางแผน</h5>
+                                <h2><%= contracts.reduce((sum, c) => sum + (c.package_count || 0), 0) %></h2>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-boxes fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-warning">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h5 class="card-title">เป้าหมายรวม</h5>
+                                <h2><%= contracts.reduce((sum, c) => sum + (c.total_target || 0), 0).toLocaleString() %></h2>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-target fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-info">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h5 class="card-title">คิวการผลิต</h5>
+                                <h2>0</h2>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-list fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-file-contract"></i> สัญญาล่าสุด</h5>
+                <a href="/contracts/new" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus"></i> สร้างสัญญาใหม่
+                </a>
+            </div>
+            <div class="card-body">
+                <% if (contracts.length === 0) { %>
+                    <div class="text-center py-4">
+                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">ยังไม่มีสัญญา</p>
+                        <a href="/contracts/new" class="btn btn-primary">สร้างสัญญาแรก</a>
+                    </div>
+                <% } else { %>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>หมายเลขสัญญา</th>
+                                    <th>ลูกค้า</th>
+                                    <th>จำนวนสินค้า</th>
+                                    <th>เป้าหมายรวม</th>
+                                    <th>วันที่สร้าง</th>
+                                    <th>การดำเนินการ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% contracts.forEach(contract => { %>
+                                    <tr>
+                                        <td>
+                                            <a href="/contracts/<%= contract.Contract_ID %>" class="text-decoration-none">
+                                                <%= contract.Contract_Number %>
+                                            </a>
+                                        </td>
+                                        <td><%= contract.Customer_ID %></td>
+                                        <td><span class="badge bg-info"><%= contract.package_count || 0 %></span></td>
+                                        <td><%= (contract.total_target || 0).toLocaleString() %></td>
+                                        <td><%= new Date(contract.Created_Date).toLocaleDateString('th-TH') %></td>
+                                        <td>
+                                            <a href="/contracts/<%= contract.Contract_ID %>" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-eye"></i> ดู
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================================ -->
